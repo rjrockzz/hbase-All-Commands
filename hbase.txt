@@ -1,0 +1,108 @@
+!connect jdbc:hive2://localhost:10000/default "" "" ""
+ALTER TABLE tablename SET TBLPROPERTIES ("skip.header.line.count"="1");
+
+0: jdbc:hive2://localhost:10000/default> set hive.metastore.warehouse.dir;
++----------------------------------------------------+--+
+|                        set                         |
++----------------------------------------------------+--+
+| hive.metastore.warehouse.dir=/user/hive/warehouse  |
++----------------------------------------------------+--+
+
+***HBase*** - HBase is a column-oriented database (OLAP purposes) and the tables in it are sorted by row. The table schema defines only column families, which are the key value pairs
+
+* Table is a collection of rows.
+* Row is a collection of column families.
+* Column family is a collection of columns.
+* Column is a collection of key value pairs.
+
+* HBase is schema-less, it doesn't have the concept of fixed columns schema, defines only column families.
+* It is built for wide tables. HBase is horizontally scalable.
+* No transactions are there in HBase.
+* It has de-normalized data.
+* It is good for semi-structured as well as structured data.
+* HBase is linearly scalable.
+* It has automatic failure support.
+* It provides consistent read and writes.
+* It integrates with Hadoop, both as a source and a destination.
+* It has easy java API for client.
+* It provides data replication across clusters.
+								
+
+
+- create 'table' , 'column-family'
+- list
+- describe 'table'
+- put 'test' , 'row1' , 'cf:a' , 'value1' 
+
+***The first insert is at row1, column cf:a, with a value of value1. Columns in HBase are comprised of a column family prefix, cf in this example, followed by a colon and then a column qualifier suffix, a in this case.***
+
+- scan 'test'
+- get 'test' , 'row1'
+
+***Get a single row of data***
+
+- enable/disable 'test'
+
+***If you want to delete a table or change its settings, as well as in some other situations, you need to disable the table first, using the disable command. You can re-enable it using the enable command.***
+
+- drop 'test'
+
+- status : This command returns the status of the system including the details of the servers running on the system. 
+
+-create 'emp' , 'personal', 'professional'
+
+- alter 't1' , NAME => 'personal' , VERSION => 5
+*** the maximum number of cells is set to 5.***
+
+***Using alter, you can set and remove table scope operators such as MAX_FILESIZE, READONLY, MEMSTORE_FLUSHSIZE, DEFERRED_LOG_FLUSH, etc.***
+
+- alter 'emp', READONLY
+
+- alter 't1', METHOD ⇒ 'table_att_unset', NAME ⇒ 'MAX_FILESIZE'
+
+- alter 'employee','delete'=>'professional'
+
+- exists 'emp'
+
+***TO ADD COLUMN FAMILY***
+- alter 'emp' , {NAME=> 'professional'}
+
+-put ’<table name>’,’row1’,’<colfamily:colname>’,’<value>’
+
+<****hbase(main):004:0> put 'emp' ,'1', 'personal:name', 'arjun'
+0 row(s) in 0.3670 seconds
+
+hbase(main):005:0> put 'emp' ,'1', 'personal:city', 'dehradun'
+0 row(s) in 0.0110 seconds
+
+hbase(main):006:0> put 'emp' ,'1', 'professional:designation', 'techlead'
+0 row(s) in 0.0100 seconds
+
+hbase(main):007:0> put 'emp' ,'1', 'professional:salary', '1000000'
+0 row(s) in 0.0040 seconds
+
+hbase(main):008:0> put 'emp' ,'2', 'personal:name', 'arzoo'
+0 row(s) in 0.0050 seconds
+
+hbase(main):009:0> put 'emp' ,'2', 'personal:city', 'delhi'
+0 row(s) in 0.0060 seconds
+
+hbase(main):010:0> put 'emp' ,'2', 'professional:designation', 'manager'
+0 row(s) in 0.0050 seconds
+
+hbase(main):011:0> put 'emp' ,'2', 'professional:salary', '5000000'
+0 row(s) in 0.0060 seconds
+
+****>
+
+*** Update will be made simply by put ***
+
+**READING  SPECIFIC COLUMN **
+
+-  get 'emp' , '1', {COLUMN => 'personal:name'}
+
+***COUNTING ROWS***
+- count 'emp'
+- truncate 'emp'    **Drop and Recreate table**
+
+
